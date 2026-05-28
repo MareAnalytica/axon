@@ -7,7 +7,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: arc-runner-set
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
@@ -19,7 +19,7 @@ jobs:
 
   publish:
     needs: test
-    runs-on: ubuntu-latest
+    runs-on: arc-runner-set
 
     environment:
       name: pypi
@@ -48,6 +48,9 @@ jobs:
         run: |
           uv build --sdist
           uv build --wheel
+
+      - name: Install python3 (not in ARC runner image)
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq python3
 
       - name: Verify wheel contains source
         run: |
